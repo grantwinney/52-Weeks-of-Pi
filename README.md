@@ -7,7 +7,7 @@ Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the
 
 2. **Send Morse Code Via Button Click**: A Python script for accepting incoming signals (via a button on the bread board that "closes" the circuit), and translating the input into morse code.
 
-## Issues? Errors?
+***Issues? Errors?***
 
 If you notice a typo or something that's blatantly wrong, I'd appreciate pull requests with fixes. I don't know much about the Pi yet, and the last thing I want to do is steer someone wrong...
 
