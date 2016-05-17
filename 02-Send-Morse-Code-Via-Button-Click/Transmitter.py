@@ -1,10 +1,8 @@
-# coding=utf-8
-
+import datetime, threading, time
 import RPi.GPIO as GPIO
-import datetime
 import InternationalMorseCode as ICM
 
-BASE_TIME = 1000000  # in microseconds, 1000000 ms = 1 sec
+BASE_TIME = 1000000  # 1000000 microseconds = 1 sec
 TOLERANCE = BASE_TIME / 4
 
 INPUT_PIN = 31
@@ -16,19 +14,40 @@ last_edge = GPIO.LOW
 press = datetime.datetime.now()
 release = datetime.datetime.now()
 
+metronome_on = False
+
+
+def metronome():
+    global metronome_on
+
+    while True:
+        if metronome_on == False:
+            GPIO.output(11, GPIO.HIGH)
+            metronome_on = True
+        else:
+            GPIO.output(11, GPIO.LOW)
+            metronome_on = False
+        time.sleep(BASE_TIME / 1000000.0)
+
+
+def start_metronome():
+    timerThread = threading.Thread(target=metronome)
+    timerThread.daemon = True
+    timerThread.start()
+
 
 def my_callback(channel):
     #GPIO.output(21, GPIO.input(PIN))
     global last_edge, press, release
 
     if GPIO.input(INPUT_PIN) == GPIO.HIGH and last_edge == GPIO.LOW:
-        #print('\n▼  at ' + str(datetime.datetime.now()))
+        #print('\n  at ' + str(datetime.datetime.now()))
         last_edge = GPIO.HIGH
         press = datetime.datetime.now()
         detect_end_of_letter(press, release)
 
     elif GPIO.input(INPUT_PIN) == GPIO.LOW and last_edge == GPIO.HIGH:
-        #print('\n ▲ at ' + str(datetime.datetime.now()))
+        #print('\n  at ' + str(datetime.datetime.now()))
         last_edge = GPIO.LOW
         release = datetime.datetime.now()
         interpret_input(press, release)
@@ -75,6 +94,7 @@ def initialize_gpio():
 
     GPIO.setup(36, GPIO.OUT)  # Red LED
     GPIO.setup(32, GPIO.OUT)  # Green LED
+    GPIO.setup(11, GPIO.OUT)  # Blue LED
 
     GPIO.setup(INPUT_PIN, GPIO.IN)
     GPIO.add_event_detect(INPUT_PIN, GPIO.BOTH, callback=my_callback)
@@ -82,7 +102,9 @@ def initialize_gpio():
 
 try:
     initialize_gpio()
+    start_metronome()
     message = raw_input('\nPress any key to exit.\n')
+
 
 finally:
     GPIO.cleanup()
