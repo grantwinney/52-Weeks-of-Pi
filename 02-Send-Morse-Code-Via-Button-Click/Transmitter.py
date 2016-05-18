@@ -1,4 +1,6 @@
-import datetime, threading, time
+import datetime
+import threading
+import time
 import RPi.GPIO as GPIO
 import InternationalMorseCode as ICM
 
@@ -21,6 +23,7 @@ def metronome():
         GPIO.output(11, not GPIO.input(11))
         time.sleep(BASE_TIME_SECONDS / 2.0)
 
+
 def initialize_metronome():
     t = threading.Thread(target=metronome)
     t.daemon = True
@@ -29,7 +32,7 @@ def initialize_metronome():
 
 # Blink an LED on and off a few times rapidly, to signal success or failure
 def signal_to_user(channel):
-    for num in range(1,3):
+    for num in range(1, 3):
         GPIO.output(channel, GPIO.HIGH)
         time.sleep(0.1)
         GPIO.output(channel, GPIO.LOW)
@@ -112,7 +115,6 @@ def process_word():
     if process_letter():
         word = ''.join(letters)
         letters[:] = []
-        sequence = ""
         if word == "AR":
             print("End of transmission. Here's your message: " + ' '.join(words))
             print('\nClearing previous transmission. Start a new one now...\n')
