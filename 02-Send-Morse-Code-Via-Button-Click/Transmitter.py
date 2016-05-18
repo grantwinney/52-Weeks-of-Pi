@@ -2,8 +2,8 @@ import datetime, threading, time
 import RPi.GPIO as GPIO
 import InternationalMorseCode as ICM
 
-BASE_TIME_SECONDS = 1
-TOLERANCE = BASE_TIME_SECONDS / 3.0
+BASE_TIME_SECONDS = 1.0
+TOLERANCE = BASE_TIME_SECONDS / 2.0
 
 
 # Initialize GPIO settings
@@ -11,6 +11,7 @@ def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup([11, 32, 36], GPIO.OUT)  # LEDs: Blue (metronome), Green (ok), Red (error)
     GPIO.setup(31, GPIO.IN)
+    GPIO.output([32, 36], GPIO.LOW)
     GPIO.add_event_detect(31, GPIO.BOTH, callback=intercept_morse_code)
 
 
@@ -18,7 +19,25 @@ def initialize_gpio():
 def metronome():
     while True:
         GPIO.output(11, not GPIO.input(11))
-        time.sleep(BASE_TIME_SECONDS / 2)
+        time.sleep(BASE_TIME_SECONDS / 2.0)
+
+def initialize_metronome():
+    t = threading.Thread(target=metronome)
+    t.daemon = True
+    t.start()
+
+
+# Blink an LED on and off a few times rapidly, to signal success or failure
+def signal_to_user(channel):
+    for num in range(1,3):
+        GPIO.output(channel, GPIO.HIGH)
+        time.sleep(0.1)
+        GPIO.output(channel, GPIO.LOW)
+        time.sleep(0.1)
+
+
+def initialize_signal(channel):
+    threading.Thread(target=signal_to_user, args=(channel,)).start()
 
 
 last_edge = GPIO.LOW
@@ -51,10 +70,14 @@ words = []
 # Detect whether most recent button press is start of new letter or word
 def detect_termination():
     global sequence
+
+    if sequence == "":
+        return
+
     delta = calc_delta_in_sec(release, press)
 
     # Check for start of new letter (gap equal to 3 dots)
-    if (delta >= ((BASE_TIME_SECONDS * 3) - TOLERANCE)) and (delta <= ((BASE_TIME_SECONDS * 3) + TOLERANCE)):
+    if (delta >= ((BASE_TIME_SECONDS * 3) - TOLERANCE)) and (delta <= ((BASE_TIME_SECONDS * 4) + TOLERANCE)):
         process_letter()
 
     # Check for start of new word (gap equal to 7 dots - but assume anything > 7 dots is valid too)
@@ -75,10 +98,12 @@ def process_letter():
         print("Interpreted sequence " + sequence + " as the letter: " + character)
         letters.append(character)
         sequence = ""
+        initialize_signal(32)
         return True
     else:
         print('Invalid sequence: ' + sequence + " (deleting current sequence)")
         sequence = ""
+        initialize_signal(36)
         return False
 
 
@@ -87,6 +112,7 @@ def process_word():
     if process_letter():
         word = ''.join(letters)
         letters[:] = []
+        sequence = ""
         if word == "AR":
             print("End of transmission. Here's your message: " + ' '.join(words))
             print('\nClearing previous transmission. Start a new one now...\n')
@@ -98,16 +124,20 @@ def process_word():
 # Interpret button click (press/release) as dot, dash or unrecognized
 def interpret_input():
     global sequence
+
     delta = calc_delta_in_sec(press, release)
 
     if (delta >= (BASE_TIME_SECONDS - TOLERANCE)) and (delta <= (BASE_TIME_SECONDS + TOLERANCE)):
         sequence += '.'
         print(str(delta) + " : Added dot to sequence:  " + sequence)
+        initialize_signal(32)
     elif (delta >= ((BASE_TIME_SECONDS * 3) - TOLERANCE)) and (delta <= ((BASE_TIME_SECONDS * 3) + TOLERANCE)):
         sequence += '-'
         print(str(delta) + " : Added dash to sequence: " + sequence)
+        initialize_signal(32)
     else:
         print(str(delta) + " : Unrecognized input!")
+        initialize_signal(36)
 
 
 def calc_delta_in_sec(time1, time2):
@@ -117,7 +147,7 @@ def calc_delta_in_sec(time1, time2):
 
 try:
     initialize_gpio()
-    threading.Thread(target=metronome, daemon=True).start()
+    initialize_metronome()
     message = raw_input("\nPress any key to exit.\n")
 
 
