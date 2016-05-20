@@ -1,5 +1,5 @@
 # Send Morse Code Via Button Click
-This is a Python3 script for accepting incoming signals (via a physical button that "closes" the circuit), and translating the input into morse code.
+This is a Python script for accepting incoming signals (via a physical button that "closes" the circuit), and translating the input into morse code.
 
 There are three files of interest:
 
