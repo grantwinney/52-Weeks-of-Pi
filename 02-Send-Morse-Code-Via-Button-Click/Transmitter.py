@@ -87,10 +87,6 @@ def detect_termination():
     elif delta >= ((BASE_TIME_SECONDS * 7) - TOLERANCE):
         process_word()
 
-    # If it's not a new letter or word, and it's a gap greater than a single dot, tell the user
-    elif delta > (BASE_TIME_SECONDS + TOLERANCE):
-        print("")
-
 
 # Process letter
 def process_letter():
