@@ -17,22 +17,33 @@ try:
 except ImportError:
     flags = None
 
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/gmail-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Gmail API Python Quickstart'
 
+# Board pins
+GMAIL_PIN = 22
+YAHOO_PIN = 32
+MSOFT_PIN = 36
+CHECK_NOW_PIN = 12
+
 # Number of seconds to wait before checking for mail again
-CHECK_MAIL_INTERVAL = 5
+CHECK_GMAIL_INTERVAL = 30
+
+gmail_service = None
+gmail_unread_count = 0
 
 
 # Initialize GPIO settings
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup([22, 32, 36], GPIO.OUT)
-    #GPIO.setup(12, GPIO.IN)
-    #GPIO.add_event_detect(12, GPIO.BOTH, callback=
+    GPIO.setup([GMAIL_PIN, YAHOO_PIN, MSOFT_PIN], GPIO.OUT)
+    GPIO.setup(CHECK_NOW_PIN, GPIO.IN)
+    GPIO.add_event_detect(CHECK_NOW_PIN, GPIO.RISING, callback=check_mail_accounts_now, bouncetime=1000)
+
+
+def check_mail_accounts_now(_channel):
+    check_gmail_now()
 
 
 # Get valid user credentials from storage or complete OAuth2 flow to revalidate
@@ -55,20 +66,17 @@ def get_gmail_credentials():
     return credentials
 
 
-gmail_unread_count = 0
-
-
 def gmail_led_blink():
     while True:
         if gmail_unread_count > 0:
-            GPIO.output(22, not GPIO.input(22))
+            GPIO.output(GMAIL_PIN, not GPIO.input(GMAIL_PIN))
         else:
-            GPIO.output(22, GPIO.LOW)
+            GPIO.output(GMAIL_PIN, GPIO.LOW)
         time.sleep(0.5)
 
 
 # Use Gmail API to check for new mail, every CHECK_MAIL_INTERVAL seconds
-def check_gmail(service):
+def check_gmail():
     global gmail_unread_count
 
     t = threading.Thread(target=gmail_led_blink)
@@ -76,29 +84,35 @@ def check_gmail(service):
     t.start()
 
     while True:
-        try:
-            messages = service.users().messages().list(userId='me',q='is:inbox + is:unread').execute()
-            gmail_unread_count = messages['resultSizeEstimate']
-        except errors.HttpError as error:
-            print('An error occurred: {0}'.format(error))
-
-        time.sleep(CHECK_MAIL_INTERVAL)
+        check_gmail_now()
+        time.sleep(CHECK_GMAIL_INTERVAL)
 
 
-def initialize_gmail_check(service):
-    t = threading.Thread(target=check_gmail, args=(service,))
+def check_gmail_now():
+    global gmail_unread_count
+    try:
+        messages = gmail_service.users().messages().list(userId='me',q='is:inbox + is:unread').execute()
+        gmail_unread_count = messages['resultSizeEstimate']
+    except errors.HttpError as error:
+        print('An error occurred: {0}'.format(error))
+
+
+def initialize_gmail_check():
+    t = threading.Thread(target=check_gmail)
     t.daemon = True
     t.start()
 
 
 def main():
+    global gmail_service
+
     credentials = get_gmail_credentials()
     http = credentials.authorize(httplib2.Http())
-    service = discovery.build('gmail', 'v1', http=http)
+    gmail_service = discovery.build('gmail', 'v1', http=http)
 
     try:
         initialize_gpio()
-        initialize_gmail_check(service)
+        initialize_gmail_check()
         message = raw_input("\nPress any key to exit.\n")
 
     finally:
