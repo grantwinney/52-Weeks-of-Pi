@@ -22,6 +22,8 @@ def main():
         initialize_gpio()
 
         Gmail.start()
+        Outlook.start()
+        #Yahoo.start()
 
         raw_input("\nPress any key to exit.\n")
 
