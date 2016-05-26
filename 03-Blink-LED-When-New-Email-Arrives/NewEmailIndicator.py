@@ -9,7 +9,7 @@ CHECK_NOW_PIN = 12
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup([Gmail.PIN, YAHOO_PIN, MSOFT_PIN], GPIO.OUT)
-    GPIO.setup(CHECK_NOW_PIN, GPIO.IN)
+    GPIO.setup(CHECK_NOW_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(CHECK_NOW_PIN, GPIO.RISING, callback=check_all_mail_now, bouncetime=1000)
 
 
