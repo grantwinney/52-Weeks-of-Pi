@@ -4,7 +4,7 @@ import time
 import RPi.GPIO as GPIO
 import GmailAuthorization
 
-PIN = 22
+PIN = 35
 CHECK_INTERVAL = 30
 
 service = None
