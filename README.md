@@ -7,7 +7,7 @@ Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the
 
 2. **Send Morse Code Via Button Click**: A Python script for accepting incoming signals (via a button on the bread board that "closes" the circuit), and translating the input into morse code.
 
-3. **Blink LED When New Email Arrives**: Authenticates to your Gmail account, then polls your unread message account via their API every xx seconds. When unread mail arrives, and LED blinks. When you mark it read, it turns off.
+3. **Blink LED When New Email Arrives**: Authenticates to your Gmail account, then polls your unread message account via their API every xx seconds. When unread mail arrives, an LED blinks. When you mark it read, the LED turns off.
 
 ---
 
