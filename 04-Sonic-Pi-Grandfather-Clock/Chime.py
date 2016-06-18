@@ -10,10 +10,8 @@ PAUSE_BETWEEN_NOTES = 0.75
 CHECK_TIME_INTERVAL = 10
 
 # LEDs to blink with each 15 min
-_15_MIN_PIN = 40
-_30_MIN_PIN = 12
-_45_MIN_PIN = 16
-_60_MIN_PIN = 22
+QUARTER_LED_PINS = [40, 12, 16, 22]
+CHIME_LED_PIN = 33
 
 
 # Sets of notes for Westminster Quarters
@@ -37,15 +35,20 @@ def play_note(note):
 def play_perm(note_perm):
     for note_set in note_perm:
         for num in range(4):
+            GPIO.output(QUARTER_LED_PINS[num], GPIO.HIGH)
             play_note(note_set[num])
             time.sleep(PAUSE_BETWEEN_NOTES)
+            GPIO.output(QUARTER_LED_PINS[num], GPIO.LOW)
         time.sleep(PAUSE_BETWEEN_NOTES)
 
 
 def play_hour_chimes(hour):
     for num in range(hour if 0 < hour < 13 else abs(hour - 12)):
+        GPIO.output(CHIME_LED_PIN, GPIO.HIGH)
         call(["sonic_pi", "play :E3"])
-        time.sleep(PAUSE_BETWEEN_NOTES * 2)
+        time.sleep(PAUSE_BETWEEN_NOTES)
+        GPIO.output(CHIME_LED_PIN, GPIO.LOW)
+        time.sleep(PAUSE_BETWEEN_NOTES)
 
 
 def sleep_to_next_minute():
@@ -81,7 +84,8 @@ def start_monitor():
 
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(-1, GPIO.OUT)
+    GPIO.setup(QUARTER_LED_PINS, GPIO.OUT)
+    GPIO.setup(CHIME_LED_PIN, GPIO.OUT)
 
 
 def main():
