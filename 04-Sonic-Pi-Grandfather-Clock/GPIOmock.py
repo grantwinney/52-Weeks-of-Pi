@@ -20,8 +20,8 @@ def setwarnings(set_warnings):
     print("Set warnings to {}".format(set_warnings))
 
 
-def setup(pin, direction):
-    print("Set GPIO pin {} to {}".format(pin, direction))
+def setup(pin, direction, initial):
+    print("Set GPIO pin {} to {} and initialize to {}".format(pin, direction, initial))
 
 
 def _convert_signal_to_text(signal):

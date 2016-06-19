@@ -41,7 +41,7 @@ def play_perm(note_perm):
             time.sleep(PAUSE_BETWEEN_NOTES)
         GPIO.output(QUARTER_LED_PINS[set_num], GPIO.LOW)
         time.sleep(PAUSE_BETWEEN_NOTES)
-        set_num = set_num + 1
+        set_num += 1
 
 
 def play_hour_chimes(hour):
