@@ -10,8 +10,8 @@ PAUSE_BETWEEN_NOTES = 0.75
 CHECK_TIME_INTERVAL = 10
 
 # LEDs to blink with each 15 min
-QUARTER_LED_PINS = [40, 12, 16, 22]
-CHIME_LED_PIN = 33
+QUARTER_LED_PINS = [12, 16, 22, 36]
+CHIME_LED_PIN = 40
 
 
 # Sets of notes for Westminster Quarters
