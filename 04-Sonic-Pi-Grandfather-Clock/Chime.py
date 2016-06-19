@@ -2,8 +2,8 @@ from datetime import datetime
 from subprocess import call
 import threading
 import time
-# import RPi.GPIO as GPIO
-import GPIOmock as GPIO
+import RPi.GPIO as GPIO
+# import GPIOmock as GPIO
 
 
 PAUSE_BETWEEN_NOTES = 0.75
@@ -33,13 +33,15 @@ def play_note(note):
 
 
 def play_perm(note_perm):
+    set_num = 0
     for note_set in note_perm:
+        GPIO.output(QUARTER_LED_PINS[set_num], GPIO.HIGH)
         for num in range(4):
-            GPIO.output(QUARTER_LED_PINS[num], GPIO.HIGH)
             play_note(note_set[num])
             time.sleep(PAUSE_BETWEEN_NOTES)
-            GPIO.output(QUARTER_LED_PINS[num], GPIO.LOW)
+        GPIO.output(QUARTER_LED_PINS[set_num], GPIO.LOW)
         time.sleep(PAUSE_BETWEEN_NOTES)
+        set_num = set_num + 1
 
 
 def play_hour_chimes(hour):
@@ -84,8 +86,8 @@ def start_monitor():
 
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(QUARTER_LED_PINS, GPIO.OUT)
-    GPIO.setup(CHIME_LED_PIN, GPIO.OUT)
+    GPIO.setup(QUARTER_LED_PINS, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(CHIME_LED_PIN, GPIO.OUT, initial=GPIO.LOW)
 
 
 def main():
