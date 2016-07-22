@@ -5,4 +5,4 @@ Checks the time at some regular interval (default is 10 seconds), playing the [W
 
 Run the Chime.py file.
 
-I uploaded a [demo](https://www.youtube.com/watch?v=VXSJ3EMTgk) if you're interested in seeing it work.
+I uploaded a [demo](https://www.youtube.com/watch?v=_VXSJ3EMTgk) if you're interested in seeing it work.
