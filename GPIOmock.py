@@ -1,5 +1,6 @@
-# Created by the comments in source/_gpio.c, in the RPi.GPIO package
+# Created by the comments in source/py_gpio.c, in the RPi.GPIO package
 # available here -> https://pypi.python.org/pypi/RPi.GPIO
+# or here -> https://github.com/Tieske/rpi-gpio/blob/master/source/py_gpio.c
 
 HIGH = 1
 LOW = 0
@@ -68,8 +69,7 @@ def getmode():
 # channel      - either board pin number or BCM number depending on which mode is set.
 # callback     - a callback function
 def add_event_callback(gpio, callback):
-    print("Added additional event to callback {} to event already defined for channel {}"
-          .format(callback, gpio))
+    print("Also call {} when edge detected on channel {}".format(callback, gpio))
 
 
 # Enable edge detection events for a particular GPIO channel.
@@ -78,7 +78,7 @@ def add_event_callback(gpio, callback):
 # [callback]   - A callback function for the event (optional)
 # [bouncetime] - Switch bounce timeout in ms for callback
 def add_event_detect(gpio, edge, callback=None, bouncetime=None):
-    print("Added event detection to PIN {} on edge {}. Call function {} with minimal bounce time of {}."
+    print("Added event detection to PIN {} on edge {}. Call {} with minimal bounce time of {}."
           .format(gpio, edge, callback, bouncetime))
 
 

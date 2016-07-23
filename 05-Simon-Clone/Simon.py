@@ -1,7 +1,8 @@
-import RPi.GPIO as GPIO
-#import GPIOmock as GPIO
+# import RPi.GPIO as GPIO
+import GPIOmock as GPIO
 import threading
 import time
+import random
 
 LED_GRN = 33
 LED_RED = 37
@@ -13,57 +14,89 @@ BTN_RED = 15
 BTN_BLU = 13
 BTN_YLW = 7
 
-COLORS = [LED_GRN, LED_RED, LED_BLU, LED_YLW]
+LIGHTS = [LED_GRN, LED_RED, LED_BLU, LED_YLW]
 BUTTONS = [BTN_GRN, BTN_RED, BTN_BLU, BTN_YLW]
 
 DISPLAYING_PATTERN = False
 
+current_iteration = 0
+
+passed_current = True
+
+level = 1
+pattern = []
+random.seed()
+speed = 0.75
+
 
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup([BTN_GRN, BTN_RED, BTN_BLU, BTN_YLW], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.setup([LED_GRN, LED_RED, LED_BLU, LED_YLW], GPIO.OUT)
-    GPIO.output([LED_GRN, LED_RED, LED_BLU, LED_YLW], GPIO.LOW)
-    GPIO.add_event_detect(BTN_GRN, GPIO.BOTH, callback=process_button_click)
-    GPIO.add_event_detect(BTN_RED, GPIO.BOTH, callback=process_button_click)
-    GPIO.add_event_detect(BTN_BLU, GPIO.BOTH, callback=process_button_click)
-    GPIO.add_event_detect(BTN_YLW, GPIO.BOTH, callback=process_button_click)
+    GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(LIGHTS, GPIO.OUT, initial=GPIO.LOW)
+    # GPIO.output(LIGHTS, GPIO.LOW)
+    for i in range(4):
+        GPIO.add_event_detect(BUTTONS[i], GPIO.BOTH, callback=process_button_click)
 
 
 def process_button_click(channel):
     if not DISPLAYING_PATTERN:
-        if channel == BTN_GRN:
-            GPIO.output(LED_GRN, GPIO.input(channel))
-        elif channel == BTN_RED:
-            GPIO.output(LED_RED, GPIO.input(channel))
-        elif channel == BTN_BLU:
-            GPIO.output(LED_BLU, GPIO.input(channel))
-        else:
-            GPIO.output(LED_YLW, GPIO.input(channel))
+        global passed_current
+        global level
+        passed_current = False
+        global current_iteration
+        for i in range(level):
+            if current_iteration > level:
+                level += 1
+                passed_current = True
+                break
+            toggle_led(channel)
+            if GPIO.input(channel) == GPIO.HIGH:
+                if channel == BUTTONS[pattern[current_iteration]]:
+                    current_iteration += 1
+                    print("Right!")
+                else:
+                    print("Wrong!")
+                    break
 
-level = 1
-pattern = []
+
+def toggle_led(channel):
+    GPIO.output(LIGHTS[BUTTONS.index(channel)], GPIO.input(channel))
 
 
-def create_next_pattern():
-    global pattern
-    pattern = [COLORS[0]]
+def add_to_pattern():
+    pattern.append(random.randint(1, 4))
 
 
 def display_pattern_to_user():
     global DISPLAYING_PATTERN
     DISPLAYING_PATTERN = True
-    GPIO.output(pattern[0], GPIO.HIGH)
-    time.sleep(500)
-    GPIO.output(pattern[0], GPIO.LOW)
+    reset_leds()
+    for i in range(level):
+        GPIO.output(LIGHTS[pattern[i]], GPIO.HIGH)
+        time.sleep(speed)
+        GPIO.output(LIGHTS[pattern[i]], GPIO.LOW)
     DISPLAYING_PATTERN = False
+
+
+def reset_leds():
+    for i in range(4):
+        GPIO.output(LIGHTS, GPIO.LOW)
+
+
+def wait_for_user_input():
+    global current_iteration
+    current_iteration = 1
+    global passed_current
+    passed_current = False
+    while not passed_current:
+        time.sleep(0.25)
 
 
 def start_game():
     while True:
-        create_next_pattern()
+        add_to_pattern()
         display_pattern_to_user()
-        time.sleep(500)
+        wait_for_user_input()
 
 
 def start_game_monitor():
