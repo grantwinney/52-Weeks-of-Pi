@@ -1,4 +1,5 @@
 # Transmit Morse Code Via LED
+
 This is a Python3 app for transmitting morse code via LED on-off blinks (or anything else you choose to connect to the GPIO pin).
 
 There are three files of interest:
@@ -6,20 +7,6 @@ There are three files of interest:
 * Transmitter.py contains the main code that writes out dots and dashes for each morse code in the input sentence.
 
 * InternationalMorseCode.py has a dictionary with all the letters, numbers and punctuation for which there are "international" morse code symbols. Makes for easy lookup.
-
-* GPIOmock.py contains some functions that are named as the same as those needed from the RPi.GPIO package. In this "mock" file, they simply output a string message.
-
-The "mock" GPIO script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed.
-
-## Using the RPi GPIO Library
-
-When running this on the Pi, uncomment this line:
-
-    # import RPi.GPIO as GPIO
-
-And comment out the one after it:
-
-    import GPIOmock as GPIO
 
 ## Other Settings
 

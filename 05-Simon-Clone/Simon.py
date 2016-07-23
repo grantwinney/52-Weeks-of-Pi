@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+#import GPIOmock as GPIO
 import threading
 import time
 
@@ -17,6 +18,7 @@ BUTTONS = [BTN_GRN, BTN_RED, BTN_BLU, BTN_YLW]
 
 DISPLAYING_PATTERN = False
 
+
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup([BTN_GRN, BTN_RED, BTN_BLU, BTN_YLW], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -26,6 +28,7 @@ def initialize_gpio():
     GPIO.add_event_detect(BTN_RED, GPIO.BOTH, callback=process_button_click)
     GPIO.add_event_detect(BTN_BLU, GPIO.BOTH, callback=process_button_click)
     GPIO.add_event_detect(BTN_YLW, GPIO.BOTH, callback=process_button_click)
+
 
 def process_button_click(channel):
     if not DISPLAYING_PATTERN:
@@ -41,16 +44,20 @@ def process_button_click(channel):
 level = 1
 pattern = []
 
+
 def create_next_pattern():
     global pattern
     pattern = [COLORS[0]]
 
+
 def display_pattern_to_user():
+    global DISPLAYING_PATTERN
     DISPLAYING_PATTERN = True
     GPIO.output(pattern[0], GPIO.HIGH)
     time.sleep(500)
     GPIO.output(pattern[0], GPIO.LOW)
     DISPLAYING_PATTERN = False
+
 
 def start_game():
     while True:
@@ -58,10 +65,12 @@ def start_game():
         display_pattern_to_user()
         time.sleep(500)
 
+
 def start_game_monitor():
     t = threading.Thread(target=start_game)
     t.daemon = True
     t.start()
+
 
 def main():
     try:
@@ -74,4 +83,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
