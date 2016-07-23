@@ -11,13 +11,15 @@ Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the
 
 4. **Sonic Pi Grandfather Clock**: Checks the time at some regular interval (default is 10 seconds), playing the [Westminster Quarters](https://en.wikipedia.org/wiki/Westminster_Quarters) at each quarter-hour.
 
-* GPIOmock.py contains some functions that are named as the same as those needed from the RPi.GPIO package. In this "mock" file, they simply output a string message.
+5. **Simon Clone**: TBD
 
 ## Mocking RPi.GPIO
 
-The "mock" GPIO script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed.
+The "mock" GPIOmock.py script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed. It just outputs a message to the console that indicates its usage.
 
-Just copy this file into the same directory as any of the above scripts, and then comment out the `import RPi.GPIO` line:
+I created it by referencing the comments available in the source/py_gpio.c file in the [RPi.GPIO module](https://pypi.python.org/pypi/RPi.GPIO).
+
+Copy the file into the same directory as any of the above scripts, then comment out the `import RPi.GPIO` line:
 
     # import RPi.GPIO as GPIO
 
