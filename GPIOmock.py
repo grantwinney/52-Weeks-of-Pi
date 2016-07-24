@@ -117,10 +117,8 @@ def setwarnings(state):
 
 
 # Prints information about your Raspberry Pi
-def RPI_INFO:
-    print("{'P1_REVISION': -1, 'RAM': '-1M', 'REVISION': '-1', 'TYPE': 'Pi Model', 'PROCESSOR': 'Some Processor', 'MANUFACTURER': 'Some Mfr'}")
+RPI_INFO = "{'P1_REVISION': -1, 'RAM': '-1M', 'REVISION': '-1', 'TYPE': 'Pi Model', 'PROCESSOR': 'Some Processor', 'MANUFACTURER': 'Some Mfr'}"
 
 
 # Prints the version of RPi.GPIO
-def VERSION:
-    print("0.0.0") 
+VERSION = "0.0.0"
