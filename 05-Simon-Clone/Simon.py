@@ -24,7 +24,7 @@ speed = 0.25
 
 # flags used to signal game status
 is_displaying_pattern = False
-is_won_current_level = True
+is_won_current_level = False
 is_game_over = False
 
 # game state
@@ -35,20 +35,16 @@ pattern = []
 
 def initialize_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.setup(LIGHTS, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     for i in range(4):
-        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, callback=verify_player_selection, bouncetime=50)
+        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, callback=verify_player_selection, bouncetime=250)
 
 
 def verify_player_selection(channel):
     global current_step_of_level, current_level, is_won_current_level, is_game_over
     if not is_displaying_pattern and not is_won_current_level and not is_game_over:
-        light_led_for_button(channel)
-        #if GPIO.input(channel) == GPIO.LOW:
-        #print("Channel is: {}".format(channel))
-        #print("Current step: {}".format(current_step_of_level))
-        #print("Current pattern item is: {}".format(pattern[current_step_of_level]))
+        flash_led_for_button(channel)
         if channel == BUTTONS[pattern[current_step_of_level]]:
             current_step_of_level += 1
             if current_step_of_level >= current_level:
@@ -58,9 +54,8 @@ def verify_player_selection(channel):
             is_game_over = True
 
 
-def light_led_for_button(button_channel):
+def flash_led_for_button(button_channel):
     led = LIGHTS[BUTTONS.index(button_channel)]
-    #GPIO.output(led, GPIO.input(button_channel))
     GPIO.output(led, GPIO.HIGH)
     time.sleep(0.1)
     GPIO.output(led, GPIO.LOW)
@@ -71,7 +66,6 @@ def add_new_color_to_pattern():
     is_won_current_level = False
     current_step_of_level = 0
     next_color = random.randint(0, 3)
-    #print("Next color is: {}".format(next_color))
     pattern.append(next_color)
 
 
@@ -92,14 +86,32 @@ def wait_for_player_to_repeat_pattern():
         time.sleep(0.1)
 
 
+def reset_board_for_new_game():
+    global is_displaying_pattern, is_won_current_level, is_game_over
+    global current_level, current_step_of_level, pattern
+    is_displaying_pattern = False
+    is_won_current_level = False
+    is_game_over = False
+    current_level = 1
+    current_step_of_level = 0
+    pattern = []
+    GPIO.output(LIGHTS, GPIO.LOW)
+
+
 def start_game():
     while True:
         add_new_color_to_pattern()
         display_pattern_to_player()
         wait_for_player_to_repeat_pattern()
         if is_game_over:
-            print("\nGame Over! Your max score was {} colors!".format(current_level-1))
-            break
+            print("Game Over! Your max score was {} colors!\n".format(current_level-1))
+            play_again = input("Enter 'Y' to play again, or just press [ENTER] to exit.\n")
+            if play_again == "Y" or play_again == "y":
+                reset_board_for_new_game()
+                print("Begin new round!\n")
+            else:
+                print("Thanks for playing!\n")
+                break
         time.sleep(2)
 
 
@@ -113,7 +125,7 @@ def start_game_monitor():
 def main():
     try:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("Let the games begin!")
+        print("Begin new round!\n")
         initialize_gpio()
         start_game_monitor()
     finally:
