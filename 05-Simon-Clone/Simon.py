@@ -5,19 +5,12 @@ import time
 import random
 import sys
 import os
+from subprocess import call
 
-LED_GRN = 33
-LED_RED = 37
-LED_BLU = 35
-LED_YLW = 31
-
-BTN_GRN = 11
-BTN_RED = 15
-BTN_BLU = 13
-BTN_YLW = 7
-
-LIGHTS = [LED_GRN, LED_RED, LED_BLU, LED_YLW]
-BUTTONS = [BTN_GRN, BTN_RED, BTN_BLU, BTN_YLW]
+# green, red, blue, yellow
+LIGHTS = [33, 37, 35, 31]
+BUTTONS = [11, 15, 13, 7]
+NOTES = ["E3", "A4", "E4", "Cs4"]
 
 # values you can change that affect game play
 speed = 0.25
@@ -31,6 +24,10 @@ is_game_over = False
 current_level = 1
 current_step_of_level = 0
 pattern = []
+
+
+def play_note(note):
+    call(["sonic_pi", "play :" + note])
 
 
 def initialize_gpio():
