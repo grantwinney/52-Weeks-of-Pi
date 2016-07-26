@@ -14,6 +14,7 @@ NOTES = ["E3", "A4", "E4", "Cs4"]
 
 # values you can change that affect game play
 speed = 0.25
+use_sounds = True
 
 # flags used to signal game status
 is_displaying_pattern = False
@@ -27,7 +28,8 @@ pattern = []
 
 
 def play_note(note):
-    call(["sonic_pi", "play :" + note])
+    if use_sounds:
+        call(["sonic_pi", "play :" + note])
 
 
 def initialize_gpio():
@@ -35,12 +37,13 @@ def initialize_gpio():
     GPIO.setup(LIGHTS, GPIO.OUT, initial=GPIO.LOW)
     GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     for i in range(4):
-        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, callback=verify_player_selection, bouncetime=250)
+        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, callback=verify_player_selection, bouncetime=400 if use_sounds else 250)
 
 
 def verify_player_selection(channel):
     global current_step_of_level, current_level, is_won_current_level, is_game_over
     if not is_displaying_pattern and not is_won_current_level and not is_game_over:
+        play_note(NOTES[BUTTONS.index(channel)])
         flash_led_for_button(channel)
         if channel == BUTTONS[pattern[current_step_of_level]]:
             current_step_of_level += 1
@@ -71,6 +74,7 @@ def display_pattern_to_player():
     is_displaying_pattern = True
     GPIO.output(LIGHTS, GPIO.LOW)
     for i in range(current_level):
+        play_note(NOTES[pattern[i]])
         GPIO.output(LIGHTS[pattern[i]], GPIO.HIGH)
         time.sleep(speed)
         GPIO.output(LIGHTS[pattern[i]], GPIO.LOW)
@@ -121,6 +125,8 @@ def start_game_monitor():
 
 def main():
     try:
+        call(["sonic_pi", "set_sched_ahead_time! 0"])
+        call(["sonic_pi", "use_debug false"])
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Begin new round!\n")
         initialize_gpio()
