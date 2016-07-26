@@ -36,7 +36,7 @@ def initialize_gpio():
     GPIO.setup(LIGHTS, GPIO.OUT, initial=GPIO.LOW)
     GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     for i in range(4):
-        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, callback=verify_player_selection, bouncetime=400 if use_sounds else 250)
+        GPIO.add_event_detect(BUTTONS[i], GPIO.FALLING, verify_player_selection, 400 if use_sounds else 250)
 
 
 def verify_player_selection(channel):
