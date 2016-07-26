@@ -3,7 +3,6 @@ import RPi.GPIO as GPIO
 import threading
 import time
 import random
-import sys
 import os
 from subprocess import call
 
