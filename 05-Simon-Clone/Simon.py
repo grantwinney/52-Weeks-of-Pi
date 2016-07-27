@@ -126,6 +126,8 @@ def main():
     try:
         call(["sonic_pi", "set_sched_ahead_time! 0"])
         call(["sonic_pi", "use_debug false"])
+        call(["sonic_pi", "use_synth :pulse"])
+        call(["sonic_pi", "use_bpm 100"])
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Begin new round!\n")
         initialize_gpio()
