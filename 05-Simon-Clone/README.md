@@ -7,7 +7,7 @@ Here's a clone of the Simon game from the 80's.
 
 ## To Run
 
-Run the Simon.py file.
+Run the Simon.py file. It uses Python3 syntax, so you may have to use: `python3 Simon.py`
 
 I uploaded a [demo](https://youtu.be/cpj_cc2ZkEU) if you're interested in seeing it work.
 
