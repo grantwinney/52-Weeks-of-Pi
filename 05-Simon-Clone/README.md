@@ -9,7 +9,7 @@ Here's a clone of the Simon game from the 80's.
 
 Run the Simon.py file.
 
-<!--I uploaded a [demo](https://www.youtube.com/watch?v=_VXSJ3EMTgk) if you're interested in seeing it work.-->
+I uploaded a [demo](https://youtu.be/cpj_cc2ZkEU) if you're interested in seeing it work.
 
 ## Notes:
 
