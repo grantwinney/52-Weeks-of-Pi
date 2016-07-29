@@ -11,7 +11,7 @@ Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the
 
 4. **Sonic Pi Grandfather Clock**: Checks the time at some regular interval (default is 10 seconds), playing the [Westminster Quarters](https://en.wikipedia.org/wiki/Westminster_Quarters) at each quarter-hour.
 
-5. **Simon Clone**: TBD
+5. **Simon Clone**: A clone of the Simon pattern-matching game from the 80's.
 
 ## Mocking RPi.GPIO
 
