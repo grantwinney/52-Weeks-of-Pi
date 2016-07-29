@@ -1,7 +1,9 @@
 <img src="https://grantwinney.com/wp-content/uploads/2016/07/simon-clone-1.png" />
 
 # Simon Clone
-Here's a clone of the Simon game from the 80's. [I wrote more about the setup here](https://grantwinney.com/creating-a-simon-game-clone-on-the-raspberry-pi/).
+Here's a clone of the Simon game from the 80's.
+
+[Read more about the setup here](https://grantwinney.com/creating-a-simon-game-clone-on-the-raspberry-pi/), and then [check out everything I'm doing with the Pi](https://grantwinney.com/tag/52-weeks-of-pi/).
 
 ## To Run
 
