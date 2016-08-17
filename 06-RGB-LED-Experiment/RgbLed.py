@@ -4,9 +4,9 @@ import threading
 import time
 import random
 
-R = 37
+R = 12
 G = 33
-B = 31
+B = 32
 
 PINS = [R,G,B]
 
