@@ -4,4 +4,6 @@ I've been meaning to devote some time to learning how these RGB LEDs work, so th
 
 ## To Run
 
-Run the RgbLed.py file using: `python3 RgbLed.py`
+The RgbLed.py file cycles through colors. Run it using: `python3 RgbLed.py`
+
+The RgbLedPwm.py file cycles through colors too, but uses PWM (pulse-width modulation) to do so very smoothly.

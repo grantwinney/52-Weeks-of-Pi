@@ -13,7 +13,7 @@ Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the
 
 5. **Simon Clone**: A clone of the Simon pattern-matching game from the 80's.
 
-6. **RGB / LED Experiment**: Experimenting with an RGB LED, getting it to randomly cycle through different color combinations.
+6. **RGB / LED Experiment**: Experimenting with an RGB LED, getting it to randomly cycle through different color combinations. Also uses software PWM (pulse-width modulation) to make the cycling smooth.
 
 ## Mocking RPi.GPIO
 
