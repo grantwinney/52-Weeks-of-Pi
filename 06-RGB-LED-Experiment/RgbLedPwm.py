@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-#import GPIOmock as GPIO
 import threading
 import time
 import random
@@ -18,23 +17,23 @@ def initialize_gpio():
     GPIO.setup(PINS, GPIO.OUT, initial=GPIO.LOW)
 
 
-def color_test(channel, freq, speed):
-    p = GPIO.PWM(channel, freq)
+def color_test(channel, frequency, speed, step):
+    p = GPIO.PWM(channel, frequency)
     p.start(0)
     while True:
-        for dc in range(0, 101, 2):
-            p.ChangeDutyCycle(dc)
+        for dutyCycle in range(0, 101, step):
+            p.ChangeDutyCycle(dutyCycle)
             time.sleep(speed)
-        for dc in range(100, -1, -2):
-            p.ChangeDutyCycle(dc)
+        for dutyCycle in range(100, -1, -step):
+            p.ChangeDutyCycle(dutyCycle)
             time.sleep(speed)
 
 
 def color_test_thread():
     threads = []
-    threads.append(threading.Thread(target=color_test, args=(R, 50, 0.04)))
-    threads.append(threading.Thread(target=color_test, args=(G, 50, 0.07)))
-    threads.append(threading.Thread(target=color_test, args=(B, 50, 0.10)))
+    threads.append(threading.Thread(target=color_test, args=(R, 300, 0.02, 5)))
+    threads.append(threading.Thread(target=color_test, args=(G, 300, 0.035, 5)))
+    threads.append(threading.Thread(target=color_test, args=(B, 300, 0.045, 5)))
     for t in threads:
         t.daemon = True
         t.start()
