@@ -1,46 +1,30 @@
 import RPi.GPIO as GPIO
-#import GPIOmock as GPIO
 import threading
 import time
 import random
 
-R = 12
-G = 33
-B = 32
-
-PINS = [R,G,B]
-
-ROTATION_IN_MS = 750
-
-
-def initialize_gpio():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(PINS, GPIO.OUT, initial=GPIO.LOW)
-
-
-def color_test():
-    while True:
-        next_pin = PINS[random.randint(0, 2)]
-        GPIO.output(next_pin, not GPIO.input(next_pin))
-        time.sleep(ROTATION_IN_MS / 1000)
-
-
-def color_test_thread():
-    t = threading.Thread(target=color_test)
-    t.daemon = True
-    t.start()
-    t.join()
+PINS = [12,33,32]  # R,G,B
 
 
 def main():
     try:
-        initialize_gpio()
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(PINS, GPIO.OUT, initial=GPIO.LOW)
         print("\nPress ^C (control-C) to exit the program.\n")
-        color_test_thread()
+        while True:
+            select_and_set_next_pin()
+            if all(GPIO.input(pin) == GPIO.LOW for pin in PINS):
+                select_and_set_next_pin()
+            time.sleep(0.75)
     except KeyboardInterrupt:
         pass
     finally:
         GPIO.cleanup()
+
+
+def select_and_set_next_pin():
+    next_pin = PINS[random.randint(0, 2)]
+    GPIO.output(next_pin, not GPIO.input(next_pin))
 
 
 if __name__ == '__main__':
