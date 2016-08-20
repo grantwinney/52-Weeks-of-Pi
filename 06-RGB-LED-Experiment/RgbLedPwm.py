@@ -17,9 +17,12 @@ def initialize_gpio():
     GPIO.setup(PINS, GPIO.OUT, initial=GPIO.LOW)
 
 
+PulseWidthMods = []
+
 def color_test(channel, frequency, speed, step):
     p = GPIO.PWM(channel, frequency)
     p.start(0)
+    PulseWidthMods.append(p)
     while True:
         for dutyCycle in range(0, 101, step):
             p.ChangeDutyCycle(dutyCycle)
@@ -31,9 +34,9 @@ def color_test(channel, frequency, speed, step):
 
 def color_test_thread():
     threads = []
-    threads.append(threading.Thread(target=color_test, args=(R, 300, 0.02, 5)))
-    threads.append(threading.Thread(target=color_test, args=(G, 300, 0.035, 5)))
-    threads.append(threading.Thread(target=color_test, args=(B, 300, 0.045, 5)))
+    threads.append(threading.Thread(target=color_test, args=(R, 300, 0.020, 2)))
+    threads.append(threading.Thread(target=color_test, args=(G, 300, 0.035, 2)))
+    threads.append(threading.Thread(target=color_test, args=(B, 300, 0.045, 2)))
     for t in threads:
         t.daemon = True
         t.start()
@@ -49,6 +52,8 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        for p in PulseWidthMods:
+            p.stop()
         GPIO.cleanup()
 
 
