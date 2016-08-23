@@ -3,7 +3,7 @@ import threading
 import time
 import random
 
-R = 12
+R = 37
 G = 33
 
 pwms = []
