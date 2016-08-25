@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import threading
 import time
 import random
+import math
 
 R = 37
 G = 33
@@ -9,6 +10,7 @@ BUTTON = 22
 
 pwms = []
 aging = 1.0
+green_dc = 100
 
 
 def initialize_gpio():
@@ -24,24 +26,19 @@ def red_light():
     pwms.append(p)
     GPIO.output(R, GPIO.HIGH)
     while True:
-        if aging > .1:
-            p.ChangeDutyCycle(rand_flicker_level(75,100))
-        else:
-            p.ChangeDutyCycle(rand_flicker_level(75,100) / (aging * 4))
+        p.ChangeDutyCycle(random.randint(75, 100) * (aging + ((1 - aging) / 5)) if green_dc > 0 else 0)
         rand_flicker_sleep()
 
 
 def green_light():
+    global green_dc
     p = GPIO.PWM(G, 300)
     p.start(0)
     pwms.append(p)
     GPIO.output(G, GPIO.HIGH)
     while True:
-        if aging > .1:
-            p.ChangeDutyCycle(rand_flicker_level(15,20))
-        else:
-            p.ChangeDutyCycle(rand_flicker_level(1,3)/10)
-        #p.ChangeDutyCycle(rand_flicker_level(15,20) if aging > .05 else 0)
+        green_dc = random.randint(9, 12) * math.pow(aging, 0.5 / aging) if aging > 0.01 else 0
+        p.ChangeDutyCycle(green_dc)
         rand_flicker_sleep()
 
 
@@ -49,19 +46,10 @@ def rand_flicker_sleep():
     time.sleep(random.randint(3,15) / 100.0)
 
 
-def rand_flicker_level(min_lvl, max_lvl):
-    return random.randint(min_lvl, max_lvl) * aging
-
-
 def dying_down():
     global aging
     while True:
-        if aging > .05:
-            aging -= .01
-        elif aging > .01:
-            aging -= .001
-        else:
-            aging = 0 
+        aging = max(aging - .01, 0)
         time.sleep(.25)
 
 
