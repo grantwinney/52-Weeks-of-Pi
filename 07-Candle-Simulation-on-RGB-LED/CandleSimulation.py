@@ -24,7 +24,7 @@ def red_light():
     p.start(100)
     pwms.append(p)
     while True:
-        p.ChangeDutyCycle(random.randint(75, 100) * (intensity + ((1 - intensity) / 10)))
+        p.ChangeDutyCycle(min(random.randint(75, 100) * math.pow(intensity + 0.1, 0.75), 100) if intensity > 0 else 0)
         rand_flicker_sleep()
 
 
@@ -34,7 +34,7 @@ def green_light():
     p.start(0)
     pwms.append(p)
     while True:
-        p.ChangeDutyCycle(random.randint(9, 12) * math.pow(intensity, 1 / intensity) if intensity > 0 else 0)
+        p.ChangeDutyCycle(random.randint(33, 44) * math.pow(intensity, 2) if intensity > 0 else 0)
         rand_flicker_sleep()
 
 
