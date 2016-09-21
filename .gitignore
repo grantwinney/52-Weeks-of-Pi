@@ -1,3 +1,4 @@
 *.pyc
 *.py.save
 client_secret.json
+*.idea

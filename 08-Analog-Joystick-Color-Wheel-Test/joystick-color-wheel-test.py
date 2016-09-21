@@ -1,8 +1,8 @@
 import math
-import RPi.GPIO as GPIO
-import spidev
-import threading
-import time
+# import RPi.GPIO as GPIO
+import GPIOmock as GPIO
+# import spidev
+import spidev_mock as spidev
 
 # Open SPI bus
 spi = spidev.SpiDev()
@@ -35,7 +35,9 @@ def read_spi_data_channel(channel):
     :return:
     """
     adc = spi.xfer2([1, (8+channel) << 4, 0])
+    print("ADC is: {}".format(adc))
     data = ((adc[1] & 3) << 8) + adc[2]
+    print("DATA is: {}".format(data))
     return data
 
 
@@ -81,7 +83,7 @@ def main():
         while True:
             # If joystick switch is pressed down, turn off LEDs
             switch = read_spi_data_channel(mcp3008_switch_channel)
-            if (switch == 0):
+            if switch == 0:
                 for p in pwm_instances:
                     p.ChangeDutyCycle(0)
                 continue
@@ -90,7 +92,7 @@ def main():
             x_pos = read_spi_data_channel(mcp3008_x_voltage_channel)
             y_pos = read_spi_data_channel(mcp3008_y_voltage_channel)
 
-            # If joystick is at rest, turn on all LEDs (producing 'white')
+            # If joystick is at rest in center, turn on all LEDs at max
             if is_joystick_near_center(x_pos, y_pos):
                 for p in pwm_instances:
                     p.ChangeDutyCycle(100)

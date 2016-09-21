@@ -116,9 +116,30 @@ def setwarnings(state):
     print("Set warnings to {}".format(state))
 
 
+def PWM(channel, frequency):
+    return PwmMock(channel, frequency)
+
+
 # Prints information about your Raspberry Pi
 RPI_INFO = "{'P1_REVISION': -1, 'RAM': '-1M', 'REVISION': '-1', 'TYPE': 'Pi Model', 'PROCESSOR': 'Some Processor', 'MANUFACTURER': 'Some Mfr'}"
 
-
 # Prints the version of RPi.GPIO
 VERSION = "0.0.0"
+
+
+class PwmMock:
+    p_channel = 0
+
+    def __init__(self, channel, frequency):
+        global p_channel
+        p_channel = channel
+        print("New instance of class created: {}. Enables pulse-width modulation on channel {} at frequency {}".format(self, channel, frequency))
+
+    def start(self, frequency):
+        print("Start pulse-width modulation at {} for channel {}".format(frequency, p_channel))
+
+    def ChangeDutyCycle(self, frequency):
+        print("Set pulse-width modulation to {} for channel {}".format(frequency, p_channel))
+
+    def stop(self):
+        print("Stop pulse-width modulation on channel {}".format(p_channel))
