@@ -1,8 +1,8 @@
 import math
-# import RPi.GPIO as GPIO
-import GPIOmock as GPIO
-# import spidev
-import spidev_mock as spidev
+import RPi.GPIO as GPIO
+# import GPIOmock as GPIO
+import spidev
+# import spidev_mock as spidev
 
 # Open SPI bus
 spi = spidev.SpiDev()
@@ -35,10 +35,7 @@ def read_spi_data_channel(channel):
     :return:
     """
     adc = spi.xfer2([1, (8+channel) << 4, 0])
-    print("ADC is: {}".format(adc))
-    data = ((adc[1] & 3) << 8) + adc[2]
-    print("DATA is: {}".format(data))
-    return data
+    return ((adc[1] & 3) << 8) + adc[2]
 
 
 def convert_coordinates_to_angle(x, y):
@@ -104,7 +101,7 @@ def main():
             pwm_g.ChangeDutyCycle(interpret_angle_for_led(angle, 330))  # green
             pwm_b.ChangeDutyCycle(interpret_angle_for_led(angle, 210))  # blue
 
-            print("Coordinate : ({},{})  --  Angle : {}".format(x_pos, y_pos, angle))
+            # print("Position : ({},{})  --  Angle : {}".format(x_pos, y_pos, round(angle, 2)))
 
     except KeyboardInterrupt:
         pass
@@ -112,6 +109,7 @@ def main():
     finally:
         for p in pwm_instances:
             p.stop()
+        spi.close()
         GPIO.cleanup()
 
 
