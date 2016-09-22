@@ -19,3 +19,6 @@ class SpiDevMock:
         delay_usecs = 0
         bits_per_word = 0
         return speed_hz, delay_usecs, bits_per_word
+
+    def close(self):
+        print("Disconnects from the SPI device.")
