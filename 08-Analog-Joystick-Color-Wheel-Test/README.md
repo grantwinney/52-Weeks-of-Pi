@@ -2,7 +2,7 @@
 
 This project demonstrates using pulse width modulation (PWM) to change the color of an RGB LED, as well as integrating analog controls with the Pi via specialized (inexpensive) hardware.
 
-I used an MCP3008 analog-to-digital converter to connect a joystick to the Pi, thanks to some extremely _very_ helpful tutorials on the Raspberry Pi Spy site.
+I used an MCP3008 analog-to-digital converter to connect a joystick to the Pi, thanks to some extremely helpful tutorials on the Raspberry Pi Spy site.
 
 Then I took it a step further by using the joystick to "select" the color from an RGB color wheel, which I display with an RGB LED.
 
