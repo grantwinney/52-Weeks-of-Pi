@@ -17,3 +17,5 @@ Then I took it a step further by using the joystick to "select" the color from a
 There's a test file too. This was my first foray into writing Python unit tests, a habit I'd suggest every developer learn more about.
 
 To run the test file, you'll need to install the [DDT (Data-Driven Tests) package for Python unit testing](https://technomilk.wordpress.com/2012/02/12/multiplying-python-unit-test-cases-with-different-sets-of-data/) via pip.
+
+`pip install ddt`
