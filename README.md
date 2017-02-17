@@ -21,6 +21,8 @@ I intend to [write up instructions for each of these](https://grantwinney.com/ta
 
 8. **[Using an Analog Joystick to Display Colors on an RGB LED](https://github.com/grantwinney/52-Weeks-of-Pi/tree/master/08-Analog-Joystick-Color-Wheel-Test)**: Used an MCP3008 analog-to-digital converter to connect a joystick to the Pi. Using it to select the colors of an RGB color wheel and display the color on an RGB LED.
 
+9. **[What is Charlieplexing?](https://github.com/grantwinney/52-Weeks-of-Pi/tree/master/09-Charlieplexing-LEDs)**: Demo of "charlieplexing", or arranging LEDs in such a way as to minimize the number of GPIO pins required to make them light up.
+
 ## Mocking RPi.GPIO
 
 The "mock" GPIOmock.py script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed. It just outputs a message to the console that indicates its usage. I created it by referencing the comments available in the source/py_gpio.c file in the [RPi.GPIO module](https://pypi.python.org/pypi/RPi.GPIO), also available on [GitHub](https://github.com/Tieske/rpi-gpio/blob/master/source/py_gpio.c).
