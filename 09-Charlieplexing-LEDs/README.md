@@ -4,7 +4,7 @@ These scripts help demonstrate a concept called "charlieplexing", which is arran
 
 It's easy to demonstrate with only 2 pins, but you only start seeing benefits when you use 3 or more - the exact number of LEDs supported by `x` number of GPIO pins is `x² - x`.
 
-[Read more about the setup]() or just [watch the demo](https://www.youtube.com/watch?v=GXnijBPWMEc), then [check out other stuff I'm doing with the Pi](https://grantwinney.com/tag/52-weeks-of-pi/).
+[Read more about the setup](https://grantwinney.com/what-is-charlieplexing-a-short-demo-using-the-raspberry-pi/) or just [watch the demo](https://www.youtube.com/watch?v=GXnijBPWMEc), then [check out other stuff I'm doing with the Pi](https://grantwinney.com/tag/52-weeks-of-pi/).
 
 ## To Run
 
