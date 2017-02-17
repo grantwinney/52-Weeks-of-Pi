@@ -6,7 +6,7 @@ I used an MCP3008 analog-to-digital converter to connect a joystick to the Pi, t
 
 Then I took it a step further by using the joystick to "select" the color from an RGB color wheel, which I display with an RGB LED.
 
-[Read more about the setup here](https://grantwinney.com/connecting-an-analog-joystick-to-the-raspberry-pi-and-using-it-with-an-rgb-led-to-simulate-a-color-wheel/), and then [check out everything I'm doing with the Pi](https://grantwinney.com/tag/52-weeks-of-pi/).
+[Read more about the setup](https://grantwinney.com/connecting-an-analog-joystick-to-the-raspberry-pi-and-using-it-with-an-rgb-led-to-simulate-a-color-wheel/) or just [watch the video](https://www.youtube.com/watch?v=t05HVocZPCE), then [check out everything I'm doing with the Pi](https://grantwinney.com/tag/52-weeks-of-pi/).
 
 ## To Run
 
