@@ -25,7 +25,7 @@ I intend to [write up instructions for each of these](https://grantwinney.com/ta
 
 ## Mocking RPi.GPIO
 
-The "mock" GPIOmock.py script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed. It just outputs a message to the console that indicates its usage. I created it by referencing the comments available in the source/py_gpio.c file in the [RPi.GPIO module](https://pypi.python.org/pypi/RPi.GPIO), also available on [GitHub](https://github.com/Tieske/rpi-gpio/blob/master/source/py_gpio.c).
+The "mock" [GPIOmock.py](https://github.com/grantwinney/52-Weeks-of-Pi/blob/master/GPIOmock.py) script allows for development on a machine that is not the Raspberry Pi, and thus doesn't have the RPi.GPIO package installed. It just outputs a message to the console that indicates its usage. I created it by referencing the comments available in the source/py_gpio.c file in the [RPi.GPIO module](https://pypi.python.org/pypi/RPi.GPIO), also available on [GitHub](https://github.com/Tieske/rpi-gpio/blob/master/source/py_gpio.c).
 
 Copy the file into the same directory as any of the above scripts, then comment out the `import RPi.GPIO` line:
 
