@@ -3,7 +3,7 @@ I read about Shekhar Gulati's "52 technologies in 2016" idea, where he's learnin
 
 Inspired by his goal, I've decided to set my own goal of 52 Pi projects over the next year, since I've been trying to get more familiar with it. That doesn't mean they'll be big or anything... I'm going for consistent learning more than anything else.
 
-I intend to [write up instructions for each of these](https://grantwinney.com/tag/52-weeks-of-pi/), along with helpful diagrams, extra resources, etc.
+I intend to [write up instructions for each of these](https://grantwinney.com/tag/52-weeks-of-pi/), along with helpful diagrams, extra resources, etc. If you're looking for more resources, check out my other repo: [314 (or so) Awesome Raspberry Pi Resources](https://github.com/grantwinney/314-or-so-awesome-raspberry-pi-resources)
 
 1. **[Transmit Morse Code Via LED](https://github.com/grantwinney/52-Weeks-of-Pi/tree/master/01-Transmit-Morse-Code-Via-LED)**: A Python script for translating input (via the keyboard) into morse code, and transmitting it via on-off LED blinks (or anything else you connect to a GPIO pin).
 
